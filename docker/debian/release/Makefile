@@ -2,13 +2,15 @@ BYCONITY_SOURCE=$(realpath ../../..)
 BUILD_TYPE ?= "Release"
 CMAKE_FLAGS ?= ""
 TAG ?= "latest"
+UID := $(shell id -u)
+GID := $(shell id -g)
 
 pull:
 	docker pull byconity/debian-builder
 	docker pull byconity/debian-runner
 
 compile:
-	docker run --rm \
+	docker run --rm --user=$(UID):$(GID) \
 	--privileged --cap-add SYS_PTRACE \
 	-v ~/.m2:/root/.m2 \
 	-v ${BYCONITY_SOURCE}:/root/ByConity \
